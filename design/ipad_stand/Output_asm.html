@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CadQuery - Jupyter Output</title>
+    <meta name="description" content="CadQuery Jupyter Notebook Output">
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.8.3/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/master/dist/aframe-orbit-controls-component.min.js"></script>
+    <style>
+      .a-enter-vr-button {
+        left: 5%;
+      }
+      body {
+      }
+    </style>
+  </head>
+  <body>
+    <a-scene>
+
+      <a-entity
+            id="camera"
+            camera
+            fov="110"
+            position="0 0 0.2"
+            orbit-controls="
+                autoRotate: false;
+                target: #target;
+                enableDamping: true;
+                dampingFactor: 0.25;
+                rotateSpeed:0.14;
+                minDistance:0.01;
+                maxDistance:15;"
+            mouse-cursor="">
+        </a-entity>
+        
+        <a-entity id='target' scale="0.0005 0.0005 0.0005" position="0 0 0" rotation="0 0 0">
+        <a-entity json-model="src: url(base.json);" position="0 0 0" rotation="0 0 0"></a-entity>
+
+      </a-entity>
+
+    </a-scene>
+  </body>
+</html>

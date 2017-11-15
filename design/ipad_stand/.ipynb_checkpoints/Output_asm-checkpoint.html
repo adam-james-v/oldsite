@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CadQuery - Jupyter Output</title>
+    <meta name="description" content="CadQuery Jupyter Notebook Output">
+    <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.8.3/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/master/dist/aframe-orbit-controls-component.min.js"></script>
+    <script src="https://rawgit.com/takahirox/aframe-outline/master/build/aframe-outline.min.js"></script>
+    <style>
+      .a-enter-vr-button {
+        left: 5%;
+      }
+    </style>
+  </head>
+  <body>
+    <a-scene outline="thickness:0.006 antialias='true'">
+      
+      <a-entity
+            id="camera"
+            camera
+            fov="135"
+            position="0 0 0.2"
+            orbit-controls="
+                autoRotate: false;
+                target: #target;
+                enableDamping: true;
+                dampingFactor: 0.25;
+                rotateSpeed:0.14;
+                minDistance:0.01;
+                maxDistance:15;"
+            mouse-cursor="">
+        </a-entity>
+      
+      <a-entity id='target' scale="0.01 0.01 0.01" position="0 0 0" rotation="0 0 0">
+<!--         <a-entity position="0 83.7 0" rotation="0 -6 0"> -->
+            <a-entity json-model="src: url(base.json);" position="0 0 0" rotation="0 0 0"></a-entity>
+<!--             <a-entity json-model="src: url(antenna.json);" position="0 12 0" rotation="0 0 0"></a-entity>
+            <a-entity json-model="src: url(eyebrow.json);" position="-7.91 9.75 15.1" rotation="77 90 90"></a-entity>
+            <a-entity json-model="src: url(eyebrow.json);" position=" 7.91 9.75 15.1" rotation="103 90 90"></a-entity>
+            <a-entity json-model="src: url(neck.json);" position="0 -15 0" rotation="0 0 0"></a-entity>
+          </a-entity><a-entity position="0 54.7 0" rotation="0 0 0">
+          <a-entity json-model="src: url(body.json);" position="0 0 0" rotation="0 0 0"></a-entity>
+          <a-entity json-model="src: url(shoulder.json);" position="12.5 5.8 0" rotation="0 0 0"></a-entity>
+          <a-entity json-model="src: url(shoulder.json);" position="-12.5 5.8 0" rotation="0 0 0"></a-entity>
+          <a-entity json-model="src: url(torsopost.json);" position="0 -12.5 0" rotation="0 0 0"></a-entity>
+          <a-entity json-model="src: url(larm.json);" position="13.0 5.8 0" rotation="90 90 0"></a-entity>
+          <a-entity json-model="src: url(rarm.json);" position="-13.0 5.8 0" rotation="90 270 0"></a-entity>
+      </a-entity>
+      <a-entity position="0 37.7 0" rotation="0 0 0">
+          <a-entity json-model="src: url(pelvis.json);" position="0 0 0" rotation="0 0 0"></a-entity>
+          <a-entity json-model="src: url(lleg.json);" position="6.5 0.0 0" rotation="90 90 0"></a-entity>
+          <a-entity json-model="src: url(rleg.json);" position="-6.5 0.0 0" rotation="90 270 0"></a-entity>
+          <a-entity json-model="src: url(foot.json);" position="8.5 -37.7 0.0" rotation="0 0 0"></a-entity>
+          <a-entity json-model="src: url(foot.json);" position="-8.5 -37.7 0.0" rotation="0 0 0"></a-entity> -->
+<!--       </a-entity> -->
+  </a-entity>
+      
+    </a-scene>
+  </body>
+</html>
