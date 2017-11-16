@@ -22,7 +22,6 @@
     "colorDiffuse" : [0.5882352941176471, 0.5137254901960784, 0.6039215686274509],
     "colorSpecular" : [0.5, 0.5, 0.5],
     "shading" : "Lambert",
-    "wireframe" : true,
     "specularCoef" : 50,
     "transparency" : 1.0,
     "vertexColors" : false
