@@ -40,6 +40,14 @@ code {
     padding-right: 20px;
     z-index: -9;
 }
+#author:before {
+    font-family: monospace;
+    content: "--> ";
+    opacity: 0;
+}
+#author:hover:before {
+    opacity: 1;
+}
 #home-title {
     color: #E8476D;
     position: absolute;
@@ -48,6 +56,14 @@ code {
     margin-top: 250px;
     padding-left: 20px;
     z-index: -9;
+}
+#home-title:after {
+    font-family: monospace;
+    content: " <--";
+    opacity: 0;
+}
+#home-title:hover:after {
+    opacity: 1;
 }
 
 @media (max-width: 800px) {

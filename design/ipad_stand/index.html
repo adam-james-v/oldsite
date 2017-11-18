@@ -3,33 +3,61 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>/design/ipad_stand/</title>
+        <title>ipad_stand</title>
         <link rel="stylesheet" href="../../style.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/zenburn.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
     </head>
+
     <body>
         <header>
-            <img class="cover" src="cover.svg" alt="/design/ipad_stand">
-            <div id='home-title'>/design/ipad_stand/</div>
-            <div id="author">Adam Vermeer</div>
+            <img class="cover" src="cover.svg" alt="ipad_stand/cover.svg">
+            <a href="https://rustyvermeer.github.io/"><div id='home-title'>ipad_stand</div></a>
+            <a href="https://twitter.com/RustyVermeer"><div id="author">Adam Vermeer</div></a>
             <div id="topper"></div>
         </header>
-<h1>Designing an iPad Pro Stand</h1>
-<p>I love my iPad Pro. It is very light and very powerful. With the Smart Keyboard cover and the Pencil, I can use the iPad for nearly all of my computing needs (with assistance of a virtual private server for more technical tasks). </p>
-<p>However, after extended time working, I notice a pain in my neck. Sadly, there is no comfortable way to adjust the placement of the iPad relative to the keyboard.</p>
-<p>My solution: purchase a bluetooth keyboard to allow de-coupled typing. Problem solved, right?</p>
-<p>Well, almost. I could certainly adjust the iPad's location relative to my hands for typing, which was a huge step up, but the height adjustment left something to be desired. {Author's note: place picture of iPad on stack of textbooks or something}.</p>
+<h1>Designing an iPad Stand</h1>
+<p>I love my iPad Pro. It's light and powerful. With the Smart Keyboard cover and the Pencil, I can use my iPad for nearly all of my computing needs (with assistance of a virtual private server for more technical tasks).</p>
+<p>However, with extended use of the Smart Keyboard I start to feel some neck pains but have no way to adjust the screen's positioning beyond just sliding it around my desk. It would be nice to have my iPad sit at eye level while I type. </p>
+<p>My solution: purchase a bluetooth keyboard to allow de-coupled typing. That's a partial solution; I still needed some kind of support to bring the screen to a comfortable height.</p>
+<p><img alt="" src="img/normal_ipad.jpg" /></p>
+<p>Sometimes, simplicity can cause neck strain.</p>
 <p>So I decided to stretch my designer / builder muscles and solve my problem!</p>
-<p>Below are the designs for each component of the iPad stand I built. </p>
-<p>NOTE:
-- explain Jupyter Notebooks
-- explain CadQuery
-- explain A-Frame VR for showing off the final solution
-- share downloads of STEP files? 
-- also share a BOM of parts used. Hopefully I can provide source-able alternatives to the custom pieces.</p>
+<p>This post details the steps I took to create an ipad stand for myself. It includes my designs as well as photos and explanations of the manufacturing process. Since my design uses CNC Laser machines, it is unlikely to be easily replicated for the average person, so I also provide some recommendations for part alternatives that can be sourced from a hardware store. It won't be the same as my design, but the functionality will be there.</p>
+<h2>About the Contents of this Post</h2>
+<p>This post contains python code that is meant to be used with the CadQuery library. It's a script-based CAD system built upon FreeCAD open source CAD package. I also created this inside a Jupyter Notebook context and use a python module of my own making to integrate CadQuery into the Notebook environment. It's not perfect, but it works well enough.</p>
+<p>I've attached a few things that you're welcome to download:</p>
+<ul>
+<li>ZIP file containing:<ul>
+<li>.STEP files for each part</li>
+<li>.STEP file for the assembly</li>
+<li>the CQ code as a .py file, which can be run locally (requires FreeCAD and CadQuery) --&gt; Please don't trust me blindly, read the code before you run things.</li>
+<li>the .ipynb file (Jupyter Notebook) that this post is built from. You can run this on your own Jupyter server, but once again FreeCAD and CadQuery are required. Additionally, the cqjupyter module is needed to be able to view your models in the notebook.</li>
+</ul>
+</li>
+</ul>
+<h2>My 'Process'</h2>
+<p>With any small project, I end up loosely following a process. It's not scientific and I don't strictly monitor adherence to the steps. Over time as I learn more design skills (by failure more often than not) my process morphs in the small details. However, the broad strokes change much more slowly, so I can generalize them here.</p>
+<ol>
+<li>Determine the project's goal. Solve a problem, make something that looks cool, learn a new machine, etc.</li>
+<li>Brainstorm possible designs. Typically this phase occurs over several days and is rarely written. It's just collecting thoughts and mental pictures of what I want the thing to do, and how it'll do it.</li>
+<li>Source materials. For personal projects this is almost guaranteed to be sourced from the scrap bin at my work place. I'm very lucky.</li>
+<li>Collect relevant measurements </li>
+<li>Design. This step is performed iteratively. For simpler projects, I often only have to do 1 or 2 minor redesigns. Large projects will have more cycles, and may even include physical prototyping. Most designing is done in some CAD program, though that is not strictly necessary. Sure is fun though.</li>
+<li>Set up for manufacture. This includes prepping machines, creating CAM files for CNC machines, finding work clothes, etc.</li>
+<li>Manufacture. Includes creating parts, assembling, and cleaning the pieces</li>
+<li>First usage. If all goes well, this marks the end of the project. If there are serious design flaws, I return to step 5.  If there are fundamental errors in the project's scope and problem definition, I start all the way back at step 1. Painful, but necessary in some instances.</li>
+</ol>
+<h2>Get Materials</h2>
+<p>Looking through the stainless steel scrap bin, I was able to find some cool tube material. </p>
+<p>The base, I realized, could be made from some thick, heavy tube to counter-balance the iPad's weight. </p>
+<p><img alt="" src="img/base_material.jpg" /></p>
+<p>From that base I could make 2 verts from some lighter tube material. Off the verts would be the support arms from the same material. </p>
+<p><img alt="" src="img/vert_material.jpg" /></p>
+<p>That's all the material I need! I love it when a plan comes together like that.</p>
+<p><img alt="" src="" /></p>
 <h2>Define a Tube Function</h2>
 <p>Since the design is going to use tubes, it makes sense to define a simple function to quickly create them. In this case, I know that I only want to use rectangular tubes, so I'll define a function that takes:</p>
 <ul>
@@ -39,74 +67,81 @@
 <li>total length of the tube</li>
 </ul>
 <p>Edge radius of the tube is going to be internally defined in the function for simplicity. In actuality, the radius may not strictly be computable from the given dimensions. In such situations, a lookup table of radius values would have to be employed. Since these parts will only be dealt with in very small quantity, I don't care to build a whole database of materials and will simply make an assumption about the radius.</p>
-<p>For a personal project, that will certainly be good enough.</p>
+<p>For a personal project, that'll be just fine.</p>
 <pre><code>def rect_tube(b, h, t, L):
-    # Define tube's edge radius according to thickness
+    # Define tube&#39;s edge radius according to thickness
     r = t*1.5
 
-    # Set up the workplane for the tube's profile
-    end_plane = cq.Workplane('XY').workplane(offset=-L/2.0)
+    # Set up the workplane for the tube&#39;s profile
+    end_plane = cq.Workplane(&#39;XY&#39;).workplane(offset=-L/2.0)
 
     tube = (end_plane
                 .rect(b, h, centered=True).extrude(L)
-                .edges('|Z').fillet(r)
+                .edges(&#39;|Z&#39;).fillet(r)
                )
     inner = (end_plane
                 .rect(b-(t*2.0), h-(t*2.0), centered=True).extrude(L)
-                .edges('|Z').fillet(r-t)
+                .edges(&#39;|Z&#39;).fillet(r-t)
             )
     tube.cut(inner)
     return tube
-</code></pre>
+</pre></code>
+
+
 <h1>Build the Base</h1>
+<p>The base's material is a 3.0 x 1.5 x 0.125in tube. The keyboard I bought is about 13in wide, so I'll make the base 15in long, to have a nice 1in extension past the keyboard's edges.</p>
+<p>I think that'll look nice.</p>
 <pre><code># measurements in inches
 base = (rect_tube(3.0, 1.5, 0.125, 15.0)
-            .faces('&lt;Y').workplane() # select bottom of tube
+            .faces(&#39;&lt;Y&#39;).workplane() # select bottom of tube
             .moveTo(0.0, 3.0).hole(0.85, 0.2) # create access holes to fit a socket wrench
             .moveTo(0.0, -3.0).hole(0.85, 0.2)
-            .faces('&gt;Y').workplane() # select top of tube
+            .faces(&#39;&gt;Y&#39;).workplane() # select top of tube
             .moveTo(0.0, 3.0).hole(0.316, 0.2) # top holes to allow 5/16in bolt through
             .moveTo(0.0, 3.375).rect(0.9, 0.075)
             .moveTo(0.0, 2.625).rect(0.9, 0.075)
             .moveTo(0.0, -3.375).rect(0.9, 0.075)
             .moveTo(0.0, -2.625).rect(0.9, 0.075).cutBlind(-0.2)
-            .faces('&gt;Y').workplane()
+            .faces(&#39;&gt;Y&#39;).workplane()
             .moveTo(0.0, -3.0).hole(0.316, 0.2)
        )
 
 show_object(base)
-</code></pre>
+</pre></code>
+
 <iframe width="650" height="500" src="base.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
+<h3>Base Design</h3>
+<p>The base tube has 2 mounting locations for the vertical tubes. On the face that will become the bottom of the stand are 2 0.85in diameter holes which are wide enough to allow a socket wrench to pass through. </p>
+<p>On the top of the base are 2 mount points, each of which have a 0.3125in hole centered between two thin slots, which are sized and positioned to interface nicely with tabs cut on the vertical tubes. </p>
+<p>This interface will be easier to understand in the assembly views later.</p>
 <h1>Set Up the Stand</h1>
 <p>Now that we've prepared a base, it's time to make the vertical arms that will actually hold the iPad up at a comfortable height. </p>
 <p>I want to keep my neck fairly straight while using this, and prefer to maintain a good posture while I work, so I'll set things fairly high up.</p>
 <p>The benefit of a high stand is that I could also move it to a standing desk and still have the screen located at a decent height, requiring only a minor angle to my neck.</p>
 <p>At least, that's the theory. I'll find out in practice if the height's good. At least I can always re-build the stand, if it comes to it. Let's plan for success, though.</p>
-<p>For variety, I'll use some smaller scrap tubing that looks quite nice.</p>
-<p>(Insert scrap tube image here)</p>
 <pre><code>vert = (rect_tube(1.0, 0.75, 0.065, 16.0)
-            .faces('&lt;X').workplane(centerOption='CenterOfBoundBox') # select side of tube
+            .faces(&#39;&lt;X&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;) # select side of tube
             .moveTo(0.0, 1.0).hole(0.3125)
-            .faces('&gt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(-0.5, 1.4)
             .lineTo(-0.4, 1.4)
             .lineTo(-0.25, 1.0)
             .lineTo(-0.4, 0.6)
             .lineTo(-0.5, 0.6).close().cutBlind(-0.1)
-            .faces('&lt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&lt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(0.5, 1.4)
             .lineTo(0.4, 1.4)
             .lineTo(0.25, 1.0)
             .lineTo(0.4, 0.6)
             .lineTo(0.5, 0.6).close().cutBlind(-0.1)
-            .faces('&gt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(-0.4, -7.0)
             .lineTo(-0.4, -8.1)
             .lineTo(0.0, -8.25)
             .lineTo(0.4, -8.1)
             .lineTo(0.4, -7.0).close().extrude(-0.065)
-            .faces('&lt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&lt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(-0.4, -7.0)
             .lineTo(-0.4, -8.1)
             .lineTo(0.0, -8.25)
@@ -115,7 +150,8 @@ show_object(base)
        )
 
 show_object(vert)
-</code></pre>
+</pre></code>
+
 <iframe width="650" height="500" src="vert.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
 <h1>Create the Support Arms</h1>
@@ -124,26 +160,26 @@ show_object(vert)
 <p>So, I'll make a horizontal arm that extends out about 2 inches and provides a small lip for the iPad to catch on, preventing sliding. The vertical supports will serve as the backrest, preventing it from falling backwards.</p>
 <p>Foam will be placed on all metal surfaces that will come in contact with the device; I don't want scratches on my nice toys!</p>
 <pre><code>support = (rect_tube(1.0, 0.75, 0.065, 2.0)
-            .faces('&gt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(0.0, -0.75)
             .rect(0.635, 0.152).cutBlind(-0.8)
-            .faces('&gt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(0.0, -0.634)
             .rect(0.375, 0.08).cutBlind(-0.2)
-            .faces('&gt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(0.0, 1.0)
             .lineTo(0.0, 0.85)
             .lineTo(-0.15, 0.8375)
             .lineTo(-0.05, 0.0)
             .threePointArc((0.141, -0.353), (0.5, -0.5))
             .lineTo(0.5, 1.0).close().cutBlind(-0.8)
-            .faces('&gt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(-0.4, -0.9)
             .lineTo(-0.4, -1.1)
             .lineTo(0.0, -1.25)
             .lineTo(0.4, -1.1)
             .lineTo(0.4, -0.9).close().extrude(-0.065)
-            .faces('&lt;Y').workplane(centerOption='CenterOfBoundBox')
+            .faces(&#39;&lt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(-0.4, -0.9)
             .lineTo(-0.4, -1.1)
             .lineTo(0.0, -1.25)
@@ -152,21 +188,69 @@ show_object(vert)
        )
 
 show_object(support)
-</code></pre>
+</pre></code>
+
 <iframe width="650" height="500" src="support.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
+<h2>Assembling The Design</h2>
+<p>Now that all of the parts are designed, it's time to assemble them. Luckily, I can use a 'naive' assembly approach to visualize what the final product will look like.</p>
+<p>I say naive because I am explicitly providing a translation and set of rotations to each object. This differs from how most CAD packages create assemblies because there is no connection between the parts, as far as the program is concerned. If one part is moved, no other parts are moved relative to this. For small projects, this works well enough, but as design complexity increases, it might become valuable to add constraint solvers and an assembly mating system. A project for another day, I think.</p>
+<p>I'm also using 2 different assemblers. The first relies on .json files and a-framevr to display the assembly in browser. The second relies on .step files and combines them into a new step file with a compound part structure, which sort of works as an assembly. </p>
+<p>The .json assembly is lossy, as the parts have to be tessellated to display through the webgl framework. The .step assembly is lossless, as STEP files use brep (boundary representation) to store geometrical data. Importing the step files into another CAD program will allow you to make modifications without concern for rounding issues.</p>
 <pre><code>import cqjupyter_extras as cqe
+import cqtools
 
 asm = [
-    ['base', '0 0 0', '0 0 0' ],
-    ['vert', '0 222.25 76.2', '270 0 0' ],
-    ['vert', '0 222.25 -76.2', '270 0 0' ],
-    ['support', '38.1 247.65 76.2', '0 90 270' ],
-    ['support', '38.1 247.65 -76.2', '0 90 270' ],
+    [&#39;base&#39;, &#39;0 0 0&#39;, &#39;0 0 0&#39; ],
+    [&#39;vert&#39;, &#39;0 222.25 76.2&#39;, &#39;270 0 0&#39; ],
+    [&#39;vert&#39;, &#39;0 222.25 -76.2&#39;, &#39;270 0 0&#39; ],
+    [&#39;support&#39;, &#39;38.1 247.65 76.2&#39;, &#39;0 90 270&#39; ],
+    [&#39;support&#39;, &#39;38.1 247.65 -76.2&#39;, &#39;0 90 270&#39; ],
 ]
 
-cqe.cqassemble(asm, name='assembly')
-</code></pre>
+cqe.cqassemble(asm, name=&#39;support&#39;)
+
+base_part = cqtools._loadSTEP(&#39;base.STEP&#39;)
+vert_part = cqtools._loadSTEP(&#39;vert.STEP&#39;)
+support_part = cqtools._loadSTEP(&#39;support.STEP&#39;)
+
+asm2 = [
+    base_part.findSolid(),
+    vert_part.translate((0, 76.2, 222.25)).rotate((0,0,0), (1,0,0), 270).findSolid(),
+    vert_part.translate((0, -76.2, 222.25)).rotate((0,0,0), (1,0,0), 270).findSolid(),
+    (support_part
+         .rotate((0,0,0), (0,1,0), 90)
+         .rotate((0,0,0), (1,0,0), 270)
+         .translate((38.1, 247.65, 76.2))
+         .findSolid()),
+    (support_part
+         .rotate((0,0,0), (0,1,0), 90)
+         .rotate((0,0,0), (1,0,0), 270)
+         .translate((38.1, 247.65, -76.2))
+         .findSolid()),
+]
+
+final = cq.cq.Compound.makeCompound(asm2)
+final = cq.CQ(final)
+show_object(final)
+</pre></code>
+
 <iframe width="650" height="500" src="assembly.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<h2>Assembling in Real Life</h2>
+<p>After design comes preparation, including CAM and machine preparation. Those things are fun to do, but boring to see and very specific to the machinery used, so I will not go into details. about it here. Suffice it to say that it takes some patience and attention to detail to make sure you don't damage your equipment and/or make parts incorrectly.</p>
+<p>I managed to make all necessary parts without issue, though, and the results were awesome!</p>
+<p><img alt="" src="img/all_parts.jpg" /></p>
+<p>Once my parts were cut and knolled sufficiently, I was ready to assemble everything. You'll notice the nuts and bolts used to assemble the stand in the picture above as well. It's just some 5/16in bolts and 'weld tab' nuts that I have at the shop here. They slot nicely into the tubes (as planned) and are easy to reach and tighten with the appropriate socket + ratchet combination.</p>
+<p>You will notice in the assembly images that I also added some foam to the supports and verts where the ipad rests. This is to avoid scratching. The foam is actually just some small pieces of weather stripping that you typically use around a window frame so that wind doesn't get in through the cracks.</p>
+<p>Check out the assembly process:</p>
+<p><img alt="" src="img/supports_close.jpg" /><br />
+<img alt="" src="img/supports_attaching.jpg" /><br />
+<img alt="" src="img/supports_attached.jpg" /><br />
+<img alt="" src="img/verts_attaching_2.jpg" /><br />
+<img alt="" src="img/verts_attaching_1.jpg" /></p>
+<p>And here it is, all finished:</p>
+<p><img alt="" src="img/assembled_1.jpg" /><br />
+<img alt="" src="img/assembled_2.jpg" /></p>
     </body>
 </html>
