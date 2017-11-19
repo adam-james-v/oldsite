@@ -10,7 +10,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
     </head>
-
+    <style>
+        #topper {
+            background-color: #e7804b;
+        }
+        #author, #home-title {
+            color: #e7804b;
+        }
+    </style>
     <body>
         <header>
             <img class="cover" src="cover.svg" alt="ipad_stand/cover.svg">
@@ -27,18 +34,31 @@
 <p>So I decided to stretch my designer / builder muscles and solve my problem!</p>
 <p>This post details the steps I took to create an ipad stand for myself. It includes my designs as well as photos and explanations of the manufacturing process. Since my design uses CNC Laser machines, it is unlikely to be easily replicated for the average person, so I also provide some recommendations for part alternatives that can be sourced from a hardware store. It won't be the same as my design, but the functionality will be there.</p>
 <h2>About the Contents of this Post</h2>
-<p>This post contains python code that is meant to be used with the CadQuery library. It's a script-based CAD system built upon FreeCAD open source CAD package. I also created this inside a Jupyter Notebook context and use a python module of my own making to integrate CadQuery into the Notebook environment. It's not perfect, but it works well enough.</p>
-<p>I've attached a few things that you're welcome to download:</p>
+<p>This post contains python code that is meant to be used with the CadQuery library. It's a script-based CAD system built upon FreeCAD, an open source CAD package. I also created this inside a Jupyter Notebook context and use a python module of my own making to integrate CadQuery into the Notebook environment. It's not perfect, but it works well enough.</p>
+<p>In this post I have several iframes which are linked to a few a-frame VR scenes. I use these to showcase the parts in browser. It's actually a VR-ready library, so you can actually view the objects in VR if you've got access to that sort of thing.</p>
+<p>All links to the mentioned software:</p>
 <ul>
-<li>ZIP file containing:<ul>
+<li><a href="https://github.com/dcowden/cadquery/tree/9e18b61d645981395e20fa62afd0861e023b865c">CadQuery Github Page</a></li>
+<li><a href="https://www.freecadweb.org/">FreeCAD</a></li>
+<li><a href="http://jupyter.org/">Jupyter</a></li>
+<li><a href="https://github.com/RustyVermeer/cqnb">CQNB - Jupyter Notebook CadQuery Extension</a></li>
+<li><a href="https://aframe.io/">A-Frame VR</a></li>
+</ul>
+<p>And, if you'd like to get a feel for CadQuery in the context of a Jupyter notebook, you can check out <a href="https://trycadquery.com"><a href="https://trycadquery.com">https://trycadquery.com</a></a>. It's a minimal server, set up by me, an admitted novice when it comes to, well, most things, actually. So, please be gentle. </p>
+<h2>Some Downloads</h2>
+<p>I've attached a few things that you're welcome to download, details and links listed below:</p>
+<ul>
+<li><a href="downloads/step-files.zip" download>step-files.zip</a> containing:<ul>
 <li>.STEP files for each part</li>
 <li>.STEP file for the assembly</li>
 <li>the CQ code as a .py file, which can be run locally (requires FreeCAD and CadQuery) --&gt; Please don't trust me blindly, read the code before you run things.</li>
 <li>the .ipynb file (Jupyter Notebook) that this post is built from. You can run this on your own Jupyter server, but once again FreeCAD and CadQuery are required. Additionally, the cqjupyter module is needed to be able to view your models in the notebook.</li>
 </ul>
 </li>
+<li><a href="downloads/ipad_stand.ipynb" download>ipad_stand.ipynb</a> which I created as I went through my design process. It also happens to be the source (more or less) of this post.</li>
+<li><a href="downloads/ipad_stand.py" download>ipad_stand.py</a>. The source code for the cadquery parts, with no additional markdown nonsense. You'll need to look at the CadQuery documentation to set things up, if you don't already have it installed.</li>
 </ul>
-<h2>My 'Process'</h2>
+<h2>My Process</h2>
 <p>With any small project, I end up loosely following a process. It's not scientific and I don't strictly monitor adherence to the steps. Over time as I learn more design skills (by failure more often than not) my process morphs in the small details. However, the broad strokes change much more slowly, so I can generalize them here.</p>
 <ol>
 <li>Determine the project's goal. Solve a problem, make something that looks cool, learn a new machine, etc.</li>
@@ -57,7 +77,6 @@
 <p>From that base I could make 2 verts from some lighter tube material. Off the verts would be the support arms from the same material. </p>
 <p><img alt="" src="img/vert_material.jpg" /></p>
 <p>That's all the material I need! I love it when a plan comes together like that.</p>
-<p><img alt="" src="" /></p>
 <h2>Define a Tube Function</h2>
 <p>Since the design is going to use tubes, it makes sense to define a simple function to quickly create them. In this case, I know that I only want to use rectangular tubes, so I'll define a function that takes:</p>
 <ul>
@@ -93,11 +112,15 @@
 <p>I think that'll look nice.</p>
 <pre><code># measurements in inches
 base = (rect_tube(3.0, 1.5, 0.125, 15.0)
-            .faces(&#39;&lt;Y&#39;).workplane() # select bottom of tube
-            .moveTo(0.0, 3.0).hole(0.85, 0.2) # create access holes to fit a socket wrench
+            # select bottom of tube
+            .faces(&#39;&lt;Y&#39;).workplane()
+            # create access holes to fit a socket wrench
+            .moveTo(0.0, 3.0).hole(0.85, 0.2)
             .moveTo(0.0, -3.0).hole(0.85, 0.2)
-            .faces(&#39;&gt;Y&#39;).workplane() # select top of tube
-            .moveTo(0.0, 3.0).hole(0.316, 0.2) # top holes to allow 5/16in bolt through
+            # select top of tube
+            .faces(&#39;&gt;Y&#39;).workplane()
+            # top holes to allow 5/16in bolt through
+            .moveTo(0.0, 3.0).hole(0.316, 0.2)
             .moveTo(0.0, 3.375).rect(0.9, 0.075)
             .moveTo(0.0, 2.625).rect(0.9, 0.075)
             .moveTo(0.0, -3.375).rect(0.9, 0.075)
@@ -109,8 +132,10 @@ base = (rect_tube(3.0, 1.5, 0.125, 15.0)
 show_object(base)
 </pre></code>
 
+
 <iframe width="650" height="500" src="base.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
+<p><a href="base.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 <h3>Base Design</h3>
 <p>The base tube has 2 mounting locations for the vertical tubes. On the face that will become the bottom of the stand are 2 0.85in diameter holes which are wide enough to allow a socket wrench to pass through. </p>
 <p>On the top of the base are 2 mount points, each of which have a 0.3125in hole centered between two thin slots, which are sized and positioned to interface nicely with tabs cut on the vertical tubes. </p>
@@ -121,7 +146,8 @@ show_object(base)
 <p>The benefit of a high stand is that I could also move it to a standing desk and still have the screen located at a decent height, requiring only a minor angle to my neck.</p>
 <p>At least, that's the theory. I'll find out in practice if the height's good. At least I can always re-build the stand, if it comes to it. Let's plan for success, though.</p>
 <pre><code>vert = (rect_tube(1.0, 0.75, 0.065, 16.0)
-            .faces(&#39;&lt;X&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;) # select side of tube
+            # select side of tube
+            .faces(&#39;&lt;X&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(0.0, 1.0).hole(0.3125)
             .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
             .moveTo(-0.5, 1.4)
@@ -152,8 +178,11 @@ show_object(base)
 show_object(vert)
 </pre></code>
 
+
 <iframe width="650" height="500" src="vert.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
+<p><a href="vert.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+<p>FYI, you can interact with the above object (and all others in the post). Right-Click and drag to pan. Lef-Click and drag to rotate.</p>
 <h1>Create the Support Arms</h1>
 <p>To actually hold the iPad up, some horizontal support arms will be necessary. It's sensible to use the same tube as is used for the vertical components, because it eliminates the need to change the machine over to a different material size a third time. It also looks quite nice when parts have a smooth interface between them. By that I simply mean that I like it when things line up.</p>
 <p>The iPad's angle shouldn't be too great, either, so that's a design consideration. The closer to vertical the better, since the screen is already going to sit at eye level. But, since this stand will be relying solely on gravity, it would be unstable to design the iPad to sit perfectly vertical. It would fall over.</p>
@@ -190,8 +219,10 @@ show_object(vert)
 show_object(support)
 </pre></code>
 
+
 <iframe width="650" height="500" src="support.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
+<p><a href="support.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 <h2>Assembling The Design</h2>
 <p>Now that all of the parts are designed, it's time to assemble them. Luckily, I can use a 'naive' assembly approach to visualize what the final product will look like.</p>
 <p>I say naive because I am explicitly providing a translation and set of rotations to each object. This differs from how most CAD packages create assemblies because there is no connection between the parts, as far as the program is concerned. If one part is moved, no other parts are moved relative to this. For small projects, this works well enough, but as design complexity increases, it might become valuable to add constraint solvers and an assembly mating system. A project for another day, I think.</p>
@@ -216,30 +247,50 @@ support_part = cqtools._loadSTEP(&#39;support.STEP&#39;)
 
 asm2 = [
     base_part.findSolid(),
-    vert_part.translate((0, 76.2, 222.25)).rotate((0,0,0), (1,0,0), 270).findSolid(),
-    vert_part.translate((0, -76.2, 222.25)).rotate((0,0,0), (1,0,0), 270).findSolid(),
+    (vert_part
+         .rotate((0,0,0), (1,0,0), 270)
+         .translate((0, 76.2, 222.25))
+         .findSolid()
+    ),
+    (vert_part
+         .rotate((0,0,0), (1,0,0), 270)
+         .translate((0, -76.2, 222.25))
+         .findSolid()
+    ),
     (support_part
          .rotate((0,0,0), (0,1,0), 90)
          .rotate((0,0,0), (1,0,0), 270)
          .translate((38.1, 247.65, 76.2))
-         .findSolid()),
+         .findSolid()
+    ),
     (support_part
          .rotate((0,0,0), (0,1,0), 90)
          .rotate((0,0,0), (1,0,0), 270)
          .translate((38.1, 247.65, -76.2))
-         .findSolid()),
+         .findSolid()
+    ),
 ]
 
+# Some weird syntax to properly create the compound geometry
+# There is likely a cleaner way to do this, but I&#39;m unaware currently
 final = cq.cq.Compound.makeCompound(asm2)
 final = cq.CQ(final)
 show_object(final)
 </pre></code>
 
+
 <iframe width="650" height="500" src="assembly.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
+<p><a href="assembly.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 <h2>Assembling in Real Life</h2>
-<p>After design comes preparation, including CAM and machine preparation. Those things are fun to do, but boring to see and very specific to the machinery used, so I will not go into details. about it here. Suffice it to say that it takes some patience and attention to detail to make sure you don't damage your equipment and/or make parts incorrectly.</p>
-<p>I managed to make all necessary parts without issue, though, and the results were awesome!</p>
+<p>After design comes preparation, including computer-aided manufacturing (CAM) and machine preparation. </p>
+<p><img alt="" src="img/CAM.jpg" /></p>
+<p>Each piece must be put through the CAM software to properly convert the 3D designs into instructions that the CNC laser can follow. On screen, such instructions are visualized as tool paths which the laser will follow around the tube.</p>
+<video style="margin-left: 0;" width="648" height="350" autoplay loop src="img/laser_cutting.mp4" type="video/mp4"></video>
+
+<p>The laser looks like a cool machine when it's running, and that's because it is cool. However, patience and attention to detail are required to make sure you don't damage your equipment and/or make parts incorrectly. This is especially true considering the cost of maintenance of such machinery, and the relative speed at which parts can be made. If something is wrong, you run the risk of making the same mistake multiple times, very rapidly. That scrap gets costly! </p>
+<p>Fortunately for me, I'm running a total of 1 ipad stand jobs, using only scrap materials, so some of that pressure is off. That's still no reason to let your attention slip, though, and I always do my best with design and machine use. </p>
+<p>I managed to make all necessary parts without issue and the results were, in my own (admittedly biased) opinion, rather awesome!</p>
 <p><img alt="" src="img/all_parts.jpg" /></p>
 <p>Once my parts were cut and knolled sufficiently, I was ready to assemble everything. You'll notice the nuts and bolts used to assemble the stand in the picture above as well. It's just some 5/16in bolts and 'weld tab' nuts that I have at the shop here. They slot nicely into the tubes (as planned) and are easy to reach and tighten with the appropriate socket + ratchet combination.</p>
 <p>You will notice in the assembly images that I also added some foam to the supports and verts where the ipad rests. This is to avoid scratching. The foam is actually just some small pieces of weather stripping that you typically use around a window frame so that wind doesn't get in through the cracks.</p>
@@ -252,5 +303,26 @@ show_object(final)
 <p>And here it is, all finished:</p>
 <p><img alt="" src="img/assembled_1.jpg" /><br />
 <img alt="" src="img/assembled_2.jpg" /></p>
+<h2>Final Thoughts</h2>
+<p>I'm very happy with this little project of mine. It holds up my ipad, which was ultimately the only thing I needed to do. I enjoyed designing within the CQ / Jupyter context, as I was able to quickly prototype designs and get visual feedback instantaneously, while also having a mechanism to keep notes typed up right with the design!</p>
+<p>Despite my success here, there are always areas to improve on, a few of which I can think of right now:</p>
+<ul>
+<li>
+<p>process improvements:</p>
+<ul>
+<li>don't use hard-coded values in my code. This was very easy to do as I was going, but doesn't make the code particularly re-usable. For example, if I want to make another stand with a different height, I will need to find those hard-coded values. Definitely need to improve that next time</li>
+<li>functions (like the tube function) should be saved to a module so that I can easily import them into future projects. Over time, there could easily be a whole library of useful part design functions.</li>
+</ul>
+</li>
+<li>
+<p>design improvements:</p>
+<ul>
+<li>an adjustable height stand would be nice. I could have made some kind of 'clamp' instead of a permanent mounting position for the supports</li>
+<li>the foam padding prevents scratching but is the least attractive part of the design. I could source a better material, or perhaps 3D print some nice caps for the tube ends</li>
+<li>End caps on the base tube would increase the 'professional' appearance of the stand. I could even make a small drawer on one side, in which I could store the charger, the Pencil, and perhaps a screen cleaning cloth.</li>
+</ul>
+</li>
+</ul>
+<p>That's my design thinking for my ipad stand. I'm glad you've read through my article, I really do appreciate that. If you have any questions or suggestions, I would love to hear them! Please ask away on my Twitter, <a href="https://www.twitter.com/RustyVermeer">@RustyVermeer</a>.</p>
     </body>
 </html>

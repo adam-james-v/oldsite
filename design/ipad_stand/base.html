@@ -2,9 +2,11 @@
 <html>
   <head>
     <title>CadQuery - Jupyter Output</title>
-    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+<!--     <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script> -->
+    <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+    <script src="https://rawgit.com/takahirox/aframe-outline/master/build/aframe-outline.min.js"></script>
     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.8.3/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/master/dist/aframe-orbit-controls-component.min.js"></script>
+    <script src="../../resources/orbit-controls-component.min.js"></script>
     <style>
       .a-enter-vr-button {
         left: 5%;
@@ -12,12 +14,12 @@
     </style>
   </head>
   <body>
-    <a-scene>
+  <a-scene outline>
       <a-entity
             id="camera"
             camera
-            fov="35"
-            position="0 0 1.6"
+            fov="90"
+            position="0 3.5 2.4"
             orbit-controls="
                 target: #target;
                 enableDamping: true;
@@ -29,7 +31,7 @@
         </a-entity>
         <a-entity id="target" position="0 0 0"></a-entity>
         <a-entity id='main' scale="0.01 0.01 0.01" position="0 0 0" rotation="0 0 0">
-          <a-entity json-model="src: url(base.json);" position="0 0 0" rotation="0 0 0"></a-entity>
+          <a-entity json-model="src: url(base.json);" position="0 0 0" rotation="0 45 0"></a-entity>
         </a-entity>
     </a-scene>
   </body>
