@@ -14,6 +14,9 @@ code {
     font-size: 15px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
+img, video {
+    max-width: 100%;
+}
 .cover {
     width: 100%;
     max-width: 400px;
@@ -43,10 +46,10 @@ code {
 #author:before {
     font-family: monospace;
     content: "--> ";
-    opacity: 0;
+    display: none;
 }
 #author:hover:before {
-    opacity: 1;
+    display: inline;
 }
 #home-title {
     color: #E8476D;
@@ -60,10 +63,10 @@ code {
 #home-title:after {
     font-family: monospace;
     content: " <--";
-    opacity: 0;
+    display: none;
 }
 #home-title:hover:after {
-    opacity: 1;
+    display: inline;
 }
 
 @media (max-width: 800px) {

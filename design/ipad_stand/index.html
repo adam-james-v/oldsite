@@ -26,25 +26,24 @@
             <div id="topper"></div>
         </header>
 <h1>Designing an iPad Stand</h1>
-<p>I love my iPad Pro. It's light and powerful. With the Smart Keyboard cover and the Pencil, I can use my iPad for nearly all of my computing needs (with assistance of a virtual private server for more technical tasks).</p>
-<p>However, with extended use of the Smart Keyboard I start to feel some neck pains but have no way to adjust the screen's positioning beyond just sliding it around my desk. It would be nice to have my iPad sit at eye level while I type. </p>
-<p>My solution: purchase a bluetooth keyboard to allow de-coupled typing. That's a partial solution; I still needed some kind of support to bring the screen to a comfortable height.</p>
+<p>I love my iPad Pro. It's light and powerful. With the Smart Keyboard cover and the Pencil, I can use my iPad for nearly all of my computing needs, with access to a Virtual Private Server for more complex technical tasks.</p>
+<p>But it's not a perfect story. Whenever I attempt to use my ipad for extended periods of time, I start to feel some neck pains. Unfortunately I have no way to adjust the screen's positioning beyond simply sliding it around my desk. It sure would be nice to have my iPad sit at eye level while I type. </p>
+<p>My solution: purchase a bluetooth keyboard to allow de-coupled typing and then design and build a nice looking stand to put the iPad on so I can work with my neck in a comfortable position.</p>
 <p><img alt="" src="img/normal_ipad.jpg" /></p>
-<p>Sometimes, simplicity can cause neck strain.</p>
-<p>So I decided to stretch my designer / builder muscles and solve my problem!</p>
-<p>This post details the steps I took to create an ipad stand for myself. It includes my designs as well as photos and explanations of the manufacturing process. Since my design uses CNC Laser machines, it is unlikely to be easily replicated for the average person, so I also provide some recommendations for part alternatives that can be sourced from a hardware store. It won't be the same as my design, but the functionality will be there.</p>
+<p>Sometimes, simplicity isn't quite comfortable enough.</p>
+<p>This post details the steps I took to create an ipad stand for myself. It includes my designs as well as photos and explanations of the manufacturing process. Since my design uses a CNC Laser machine, it is unlikely to be easily replicated by the average person. To be clear, that's not because others don't necessarily have the skill to do so, it's purely a matter of access to machinery. The design, as it turns out, isn't too complicated.
 <h2>About the Contents of this Post</h2>
 <p>This post contains python code that is meant to be used with the CadQuery library. It's a script-based CAD system built upon FreeCAD, an open source CAD package. I also created this inside a Jupyter Notebook context and use a python module of my own making to integrate CadQuery into the Notebook environment. It's not perfect, but it works well enough.</p>
-<p>In this post I have several iframes which are linked to a few a-frame VR scenes. I use these to showcase the parts in browser. It's actually a VR-ready library, so you can actually view the objects in VR if you've got access to that sort of thing.</p>
+<p>In this post I have several iframes which are linked to a few a-frame VR scenes. I use these to showcase the parts in browser. It's actually a VR-ready library, so you can actually view the objects in VR if you've got access to that sort of thing. Pleaes don't get your hopes up, I haven't spent much time with the library, so there's a good chance I've done things non-optimally. Personally, I recommend viewing the parts in browser without VR.</p>
 <p>All links to the mentioned software:</p>
 <ul>
-<li><a href="https://github.com/dcowden/cadquery/tree/9e18b61d645981395e20fa62afd0861e023b865c">CadQuery Github Page</a></li>
-<li><a href="https://www.freecadweb.org/">FreeCAD</a></li>
-<li><a href="http://jupyter.org/">Jupyter</a></li>
-<li><a href="https://github.com/RustyVermeer/cqnb">CQNB - Jupyter Notebook CadQuery Extension</a></li>
-<li><a href="https://aframe.io/">A-Frame VR</a></li>
+<li><a href="https://github.com/dcowden/cadquery" target="_blank">CadQuery Github Page</a></li>
+<li><a href="https://www.freecadweb.org/" target="_blank">FreeCAD</a></li>
+<li><a href="http://jupyter.org/" target="_blank">Jupyter</a></li>
+<li><a href="https://github.com/RustyVermeer/cqnb" target="_blank">CQNB - Jupyter Notebook CadQuery Extension</a></li>
+<li><a href="https://aframe.io/" target="_blank">A-Frame VR</a></li>
 </ul>
-<p>And, if you'd like to get a feel for CadQuery in the context of a Jupyter notebook, you can check out <a href="https://trycadquery.com"><a href="https://trycadquery.com">https://trycadquery.com</a></a>. It's a minimal server, set up by me, an admitted novice when it comes to, well, most things, actually. So, please be gentle. </p>
+<p>And, if you'd like to get a feel for CadQuery in the context of a Jupyter notebook, you can check out <a href="https://trycadquery.com" target="_blank">https://trycadquery.com</a>. It's a minimal server, set up by me, an admitted novice when it comes to, well, most things, actually. So, please be gentle. </p>
 <h2>Some Downloads</h2>
 <p>I've attached a few things that you're welcome to download, details and links listed below:</p>
 <ul>
@@ -134,8 +133,8 @@ show_object(base)
 
 
 <iframe width="650" height="500" src="base.html?overflow=none" frameborder="0" allowfullscreen></iframe>
-
 <p><a href="base.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+<p>FYI, you can interact with the above object (and all others in the post). Right-Click and drag to pan. Lef-Click and drag to rotate.</p>
 <h3>Base Design</h3>
 <p>The base tube has 2 mounting locations for the vertical tubes. On the face that will become the bottom of the stand are 2 0.85in diameter holes which are wide enough to allow a socket wrench to pass through. </p>
 <p>On the top of the base are 2 mount points, each of which have a 0.3125in hole centered between two thin slots, which are sized and positioned to interface nicely with tabs cut on the vertical tubes. </p>
@@ -181,8 +180,7 @@ show_object(vert)
 
 <iframe width="650" height="500" src="vert.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
-<p><a href="vert.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
-<p>FYI, you can interact with the above object (and all others in the post). Right-Click and drag to pan. Lef-Click and drag to rotate.</p>
+<p><a href="vert.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>z
 <h1>Create the Support Arms</h1>
 <p>To actually hold the iPad up, some horizontal support arms will be necessary. It's sensible to use the same tube as is used for the vertical components, because it eliminates the need to change the machine over to a different material size a third time. It also looks quite nice when parts have a smooth interface between them. By that I simply mean that I like it when things line up.</p>
 <p>The iPad's angle shouldn't be too great, either, so that's a design consideration. The closer to vertical the better, since the screen is already going to sit at eye level. But, since this stand will be relying solely on gravity, it would be unstable to design the iPad to sit perfectly vertical. It would fall over.</p>
@@ -286,8 +284,12 @@ show_object(final)
 <p>After design comes preparation, including computer-aided manufacturing (CAM) and machine preparation. </p>
 <p><img alt="" src="img/CAM.jpg" /></p>
 <p>Each piece must be put through the CAM software to properly convert the 3D designs into instructions that the CNC laser can follow. On screen, such instructions are visualized as tool paths which the laser will follow around the tube.</p>
-<video style="margin-left: 0;" width="648" height="350" autoplay loop src="img/laser_cutting.mp4" type="video/mp4"></video>
 
+<video style="margin-left: 0;" width="648" height="350"autoplay muted loop controls>
+  <source src="img/laser_cutting.webm" type="video/webm" />
+  <source src="img/laser_cutting.mp4" type="video/mp4" />
+</video>
+        
 <p>The laser looks like a cool machine when it's running, and that's because it is cool. However, patience and attention to detail are required to make sure you don't damage your equipment and/or make parts incorrectly. This is especially true considering the cost of maintenance of such machinery, and the relative speed at which parts can be made. If something is wrong, you run the risk of making the same mistake multiple times, very rapidly. That scrap gets costly! </p>
 <p>Fortunately for me, I'm running a total of 1 ipad stand jobs, using only scrap materials, so some of that pressure is off. That's still no reason to let your attention slip, though, and I always do my best with design and machine use. </p>
 <p>I managed to make all necessary parts without issue and the results were, in my own (admittedly biased) opinion, rather awesome!</p>
