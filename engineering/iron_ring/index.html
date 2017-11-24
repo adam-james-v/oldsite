@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>iron_ring</title>
+        <link rel="stylesheet" href="../../style.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/zenburn.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+    <style>
+        #topper {
+            background-color: #FFD637;
+        }
+        #author, #home-title {
+            color: #FFD637;
+        }
+    </style>
+    <body>
+        <header>
+            <img class="cover" src="cover.svg" alt="iron_ring/cover.svg">
+            <a href="https://rustyvermeer.github.io/"><div id='home-title'>iron_ring</div></a>
+            <a href="https://twitter.com/RustyVermeer"><div id="author">Adam Vermeer</div></a>
+            <div id="topper"></div>
+        </header>
+<h1>Iron Ring - A Canadian Engineer's Tradition</h1>
+<p>The iron ring is a symbolic piece worn on the small finger of an engineer's dominant hand. We Canadian Engineers know the ring well, and it's purpose is made clear to us all just prior to graduation from an undergraduate degree in engineering. </p>
+<p>It's an exciting event, and we all have a good time (perhaps <em>too</em> good, for some definition of <strong>good</strong>) in the days leading up to the Iron Ring Ceremony. However, I can confidently say that on the whole we also take the symbolism to heart. The ritual distills in all attending the importance of taking our work seriously as engineers. </p>
+<p>So what <em>is</em> an iron ring, physically?</p>
+<p>This is mine, posed on... some metal thing.</p>
+<p><img alt="" src="img/iron_ring.jpg" /></p>
+<p>It's a simple piece of metal, and it's actually not iron. Admittedly that's kinda strange, but wrought iron tends to react with skin when worn for long periods, so stainless steel is used instead.</p>
+<p>So that's what an iron ring actually looks like, but the more important thing is what the rings symbolise for their wearers.</p>
+<h2>The Meaning of the Iron Ring</h2>
+<p>The iron ring serves to remind its wearer of their responsibilities as a professional, stressing the importance of ethical and professional conduct. When an engineer looks at their iron ring, they are reminded of the importance of their work, and the necessity to conduct themselves with honesty, and integrity, while using their skills with pride tempered constantly with humility.</p>
+<p>Basically, we have to remember to take our jobs seriously. Our designs are not built in a vacuum (unless that's part of the spec). Our decisions affect more than just ourselves. We impact other people's lives, and we should always remember that and let that factor into our calculations.</p>
+<p>You can read a bit about the <a href="http://ironring.ca/background.php">backround</a>, which has this to say about the object of the Ritual associated with receiving an iron ring:</p>
+<blockquote>
+<p>The Ritual of the Calling of an Engineer has been instituted with the simple end of directing the newly qualified engineer toward a consciousness of the profession and its social significance and indicating to the more experienced engineer their responsibilities in welcoming and supporting the newer engineers when they are ready to enter the profession.</p>
+</blockquote>
+<h2>Coding the Iron</h2>
+<p>While I'm here, I may as well provide some code to create a parametric model of the iron ring. It should use the radius and vertical thickness as parameters, in case someone ever wanted to create a drastically different iron ring, I guess.</p>
+<p>NOTE: This is just for fun. If you want to 3D print a ring, I think that's totally fine. However, it would be in poor taste to recreate an iron ring exactly, as it circumvents the important act of receiving a ring amongst fellow students and engineers. </p>
+<pre><code>import math
+
+# R is outer radius of ring
+# T is NOT the ring&#39;s thickness radially 
+# but vertically, if the ring is resting on a surface
+# ie, the hollow cylinder that is the ring has a HEIGHT of T
+R = 9.5
+T = 3.0
+
+# Make a function that radially patterns points
+def list_points(r, a, N):
+    &#39;&#39;&#39;Radially pattern points
+
+    r: the radius of the circle on which points are placed
+    a: an offset angle from the x axis, CCW, in degrees
+    N: number of points to place radially along. 
+       Spaces evenly along full 360 circle
+    &#39;&#39;&#39;
+    arad = math.radians(a)
+    theta = math.pi*2 / N
+    pnts = []
+
+    for i in range(0, N):
+        coord = (r*math.cos(theta*i + arad), r*math.sin(theta*i + arad))
+        pnts.append(coord)
+
+    return pnts
+
+# Create a plain ring, centered in the plane and around the origin
+ring = (cq.Workplane(&quot;XZ&quot;).workplane(offset=(-T/2.0))
+    .circle(R).extrude(T)
+    .faces(&quot;&lt;Y&quot;).workplane(invert=True)
+    .circle(R-(R*0.145)).cutBlind(T)
+)
+
+# Make spheres on top and bottom of ring
+# These will be cut away from the ring 
+# To make the &#39;divets&#39; of an iron ring
+spheres1 = cq.Workplane(&quot;XZ&quot;).workplane(offset=(T-0.4))
+spheres2 = cq.Workplane(&quot;ZX&quot;).workplane(offset=(T-0.4))
+
+for point in list_points((R*1.789), 0, 8):
+    spheres1 = spheres1.moveTo(point[0], point[1]).sphere(R*0.8526)
+
+for point in list_points((R*1.789), 22.5, 8):
+    spheres2 = spheres2.moveTo(point[0], point[1]).sphere(R*0.8526)
+
+iron_ring = ring.cut(spheres1).cut(spheres2)
+
+show_object(iron_ring)
+</pre></code>
+
+
+<iframe width="650" height="500" src="iron_ring.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<h1>Final Words on the Iron Ring</h1>
+<p>I take pride in the fact that I have an Iron Ring. I put in some hard work to receive one, and I wear it all the time. But dedication to professionalism, humility, ethics, and purposeful action take continuous hard work. It's a lifelong committment to being diligent in what I do with my engineering skills. I take this very seriously.</p>
+<p>I hope over the years I can live up to the requirements of professionalism, and my iron ring reminds me daily to put in that work.</p>
+<p>To end on a light note, however, I want to also stress that a great sense of joy and accomplishment comes with the territory, too. I get to put time and attention to engaging design projects, I can focus mental efforts on complex engineering questions, and I can use my hands to build awesome things to achieve useful goals in the world. </p>
+<p>I take engineering very seriously, and I seriously love engineering.</p>
+<p>I'll leave this quote from Rudyard Kipling, the creator of the Iron Ring Ceremony, because I find it so characteristic of how an engineer tends to think about the world. It's a quote that rings of sincerity from Kipling, yet holds a kind of humour, too as it eschews written works of man in favour of raw materials (an engineer must know their priorities):</p>
+<blockquote>
+<p>The Obligation will be taken on cold iron of honourable tradition, as being a solid substance of proven strength and physical characteristics.  It will not be taken on any other written works of man, but upon a product from nature, used by every engineer. - Kipling</p>
+</blockquote>
+<h3>Blurb About the Contents of this Post</h3>
+<p>This post contains python code that is meant to be used with the CadQuery library. It's a script-based CAD system built upon FreeCAD, an open source CAD package. I also created this inside a Jupyter Notebook context and use a python module of my own making to integrate CadQuery into the Notebook environment. It's not perfect, but it works well enough.</p>
+<p>In this post I have several iframes which are linked to a few a-frame VR scenes. I use these to showcase the parts in browser. It's actually a VR-ready library, so you can actually view the objects in VR if you've got access to that sort of thing.</p>
+<p>All links to the mentioned software:</p>
+<ul>
+<li><a href="https://github.com/dcowden/cadquery/tree/9e18b61d645981395e20fa62afd0861e023b865c">CadQuery Github Page</a></li>
+<li><a href="https://www.freecadweb.org/">FreeCAD</a></li>
+<li><a href="http://jupyter.org/">Jupyter</a></li>
+<li><a href="https://github.com/RustyVermeer/cqnb">CQNB - Jupyter Notebook CadQuery Extension</a></li>
+<li><a href="https://aframe.io/">A-Frame VR</a></li>
+</ul>
+<p>And, if you'd like to get a feel for CadQuery in the context of a Jupyter notebook, you can check out <a href="https://trycadquery.com"><a href="https://trycadquery.com">https://trycadquery.com</a></a>. It's a minimal server, set up by me, an admitted novice when it comes to, well, most things, actually. So, please be gentle. </p>
+<h2>Some Downloads</h2>
+<p>I've attached a few things that you're welcome to download, details and links listed below:</p>
+<ul>
+<li><a href="downloads/iron_ring.STEP" download>iron_ring.step</a>: a CAD file of the iron ring (produced from the code in the post)</li>
+<li><a href="downloads/iron_ring.ipynb" download>iron_ring.ipynb</a>: the source notebook for this post</li>
+<li><a href="downloads/iron_ring.py" download>iron_ring.py</a>: source code for the iron ring, as a python script.</li>
+</ul>
+<p>Thanks for reading through this short article. I do appreciate you making it this far. If you think someone else you know might like reading this and seeing the code / output in the article, please share it! I'd love that. It's cool if you don't want to either. You know, no pressure. </p>
+<h3>Thanks</h3>
+<p>You can find me <a href="https://www.twitter.com/RustyVermeer">@RustyVermeer</a> if you want to engage me directly. Please do, I like that sort of thing. :)</p>
+    </body>
+</html>
