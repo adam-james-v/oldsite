@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>tv_frame</title>
+        <link rel="stylesheet" href="../../style.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/zenburn.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+    <style>
+        #topper {
+            background-color: #858a7e;
+        }
+        #author, #home-title {
+            color: #858a7e;
+        }
+    </style>
+    <body>
+        <header>
+            <img class="cover" src="cover.svg" alt="tv_frame/cover.svg">
+            <a href="https://rustyvermeer.github.io/"><div id='home-title'>tv_frame</div></a>
+            <a href="https://twitter.com/RustyVermeer"><div id="author">Adam Vermeer</div></a>
+            <div id="topper"></div>
+        </header>
+<h1>Building a TV Frame</h1>
+<p>Several years ago I built a weird looking desk that had a PC and TV built right in. It never progressed beyond 'usable prototype', and was eventually disassembled. The TV had been partially stripped down to fit nicely in the desk's surface, and the old parts were discarded.</p>
+<p><img alt="" src="img/old_desk.jpg" /></p>
+<p>Since the TV is still good, I want to design a frame and stand that will allow me to actually use it again.</p>
+<h2>Requirements</h2>
+<p>The frame must meet the following criteria:</p>
+<ul>
+<li>look decent</li>
+<li>be of sound construction, meaning: all connections must be <em>tight</em> and secure.</li>
+<li>cover the loose circuit board on the front</li>
+<li>not obstruct any ports on the back of the TV</li>
+<li>provide mounting points on the base for a simple stand</li>
+<li>allow for standard TV mounting hardware to still fit on the back of the TV</li>
+</ul>
+<h2>Details and Images</h2>
+<p>Before the design can properly begin, some measurements will be needed. I walked around the shop and discovered a half-used bundle of some interesting material. </p>
+<p><img alt="" src="img/raw_material.jpg" /></p>
+<p>After checking that it was actually OK to use a length or two of this (it was), I pulled one length out and measured. The dimensions are shown below.</p>
+<p><center><img alt="" src="img/profile.svg" /></center></p>
+<p>Conveniently, there is a <em>work in progress</em> dxf importer for CadQuery that should make it much simpler to work with 2D objects.</p>
+<p>So, I made a <strong>.dxf</strong> file very similar to the above SVG, and imported it to create the tube that I'll use to define all of the tv frame's parts.</p>
+<pre><code># make a simple sample piece 
+# to try out the dxf import function
+sample_tube = (cq.Workplane(&#39;XY&#39;)
+               .workplane(offset=-1)
+               .dxf(&#39;downloads/profile.dxf&#39;)
+               .extrude(2)
+              )
+
+show_object(sample_tube)
+</pre></code>
+
+
+<iframe width="650" height="400" src="sample_tube.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="sample_tube.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<p>Alright, it works! Now I can work on the actual design.</p>
+<h2>Parts Plan</h2>
+<p>This design is going to be a bit more advanced than my <a href="https://rustyvermeer.github.io/design/ipad_stand/index.html">ipad_stand</a>, so I've got a mental picture in mind that will take a few different parts:</p>
+<ul>
+<li>outer frame composed of:<ul>
+<li>horizontal bar bottom (1x)</li>
+<li>horizontal bar top (1x)</li>
+<li>vertical bar (2x)</li>
+</ul>
+</li>
+<li>inner frame composed of:<ul>
+<li>horizontal bar (2x)</li>
+<li>vertical bar (2x)</li>
+</ul>
+</li>
+<li>back lock bar (2x)</li>
+<li>stand bar (2x)</li>
+</ul>
+<p>Naming things is, generally speaking, a difficult thing to do. As such, it's much more sensible to <em>see</em> the parts than it is to rely solely on names. The next steps will be defining the CadQuery code to generate all of the parts in the list.    </p>
+<h1>Outer Frame Horizontals</h1>
+<pre><code>L = 31.6772 # comes from width of scrn + offset due to tube dims
+
+outer_h = (cq.Workplane(&#39;XY&#39;)
+           .workplane(offset=-L/2.0)
+           .dxf(&#39;downloads/profile.dxf&#39;)
+           .extrude(L)
+          )
+
+show_object(outer_h)
+</pre></code>
+
+
+<iframe width="650" height="400" src="outer_h_top.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="outer_h_top.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h1>Building it for Real</h1>
+<p>Once again I find myself kicking the laser tube cutter into action. I'm extremely lucky to remember how this thing works. As it turns out, I need to be good at last second maintenance for this thing. I had to search the shop for some hydraulic oil to top up the reservoir! Fortunately, everything still works.</p>
+<p><center><video style="margin-left: 0;" width="300" height="300" autoplay="" muted="" loop="" controls=""><br />
+  <source src="img/cutting.mp4" type="video/mp4"><br />
+</video></center></p>
+<p>With all the parts cut, it simply comes down to assembly. The pictures below show the process, more or less. Of course, the struggle of tapping the holes and tightening up all of the screws is not pictured.</p>
+<iframe width="650" height="700" src="img/asm_imgs.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<h2>Final Thoughts</h2>
+<p>I can finally use my TV again. Mission accomplished! I like the industrial look to the whole thing, too; I suspect there's no TV quite like this one.</p>
+<p>Yet as always, there is room for improvement.</p>
+<h3>Process Improvements</h3>
+<ul>
+<li>tapping holes makes for some nice construction, but is tedious to do. Reduce how many bolted connections are needed to reduce this.</li>
+<li>it might be good to include more hand-drawn sketch images in these notebooks, to convey the initial thinking phases of my design work. I could alternatively create some basic 2D layout drawings in .dxf format. With that, I could potentially have some fancy import functions that semi-automatically place 3D objects according to some layout drawing. Lot's of potential there, for sure.</li>
+</ul>
+<h3>Design Improvements</h3>
+<ul>
+<li>I cut 5 holes for screws in every side. I tried using only 3 holes, and it held things together perfectly, so there was no need for so much cutting.</li>
+<li>The 0.5in 'lip' added to the TV does <em>slightly</em> interfere with the image when viewing at extreme angles. That fact paired with the reflectivity of the surface can cause some distraction. I only view casually anyway, so this doesn't bother me. It's definitely not good enough for the average consumer, though.</li>
+<li>Finishing. I like the industrial look, but it could be out of place in most homes. A nice powder coated finish could look really sharp.</li>
+<li>Weight. This thing is <strong>heavy</strong>. I like it that way, but it's certainly excessive. I could strategically cut holes on all inner faces to drastically cut down weight. Or I could make a triangular cut out pattern part of the aesthetic of the frame. As well, I could re-think the front frame portion as a flat sheet or even as a piece of plastic or wood to cut down a lot of weight.</li>
+</ul>
+<p>There it is, my design and build of an industrial-strength TV frame. Thanks for reading through my article. If you have any questions or suggestions, I'm glad to listen! Please ask away on my Twitter, <a href="https://www.twitter.com/RustyVermeer">@RustyVermeer</a>.</p>
+<pre><code>!jupyter nbconvert --to markdown tv_frame.ipynb
+
+import page_tools as pg
+pg.generate_page(&#39;tv_frame&#39;, color=&#39;#858a7e&#39;)
+</pre></code>
+
+
+<pre><code>[NbConvertApp] Converting notebook tv_frame.ipynb to markdown
+[NbConvertApp] Writing 5162 bytes to tv_frame.md
+Created index.html
+</code></pre>
+    </body>
+</html>
