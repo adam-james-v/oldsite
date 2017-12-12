@@ -45,9 +45,6 @@ sample_tube = (cq.Workplane('XY')
 show_object(sample_tube)
 ```
 
-<iframe width="650" height="400" src="sample_tube.html?overflow=none" frameborder="0" allowfullscreen></iframe>
-<p><a href="sample_tube.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
-
 Alright, it works! Now I can work on the actual design.
 
 ## Parts Plan
@@ -71,18 +68,71 @@ Naming things is, generally speaking, a difficult thing to do. As such, it's muc
 
 ```python
 L = 31.6772 # comes from width of scrn + offset due to tube dims
+tap_01875 = 0.1495
 
-outer_h = (cq.Workplane('XY')
-           .workplane(offset=-L/2.0)
-           .dxf('downloads/profile.dxf')
-           .extrude(L)
+outer_h_top = (cq.Workplane('XY')
+               .workplane(offset=-L/2.0)
+               .dxf('downloads/profile.dxf')
+               .extrude(L)
+               # holes on top face near edge
+               # will be tapped with 3/16 bolt thread
+               # used to mount inner frame tube
+               .faces('>Y').workplane()
+               .pushPoints([(-0.5,  13.3386),
+                            (-0.5, -13.3386),
+                            (-0.5,  6.6693),
+                            (-0.5, -6.6693),
+                            (-0.5, 0.0),])
+               .hole(tap_01875, depth=0.08)
+               # holes centered on back face
+               # 3 pairs of 3/16 tapped holes
+               # will mount back 'lock bar' tubes
+               .faces('<X').workplane()
+               .pushPoints([(0.0,  0.5),
+                            (0.0, -0.5),
+                            (0.0, 8.8386),
+                            (0.0, 7.8386),
+                            (0.0, -8.8386),
+                            (0.0, -7.8386)])
+               .hole(tap_01875, depth=0.08)
+               # Cut the tube ends to create a 'dovetail'
+               # joint to hold the vertical tubes in place
+               # back left
+               .faces('>Y').workplane()
+               .moveTo(0.425, 15.3386)
+               .polyline([(0.425, 15.4086),
+                         (0.5, 15.839),
+                         (0.75, 15.839),
+                         (0.75, 15.3386)]).close()
+               .cutThruAll()
+               # front left
+               .faces('>Y').workplane(centerOption='CenterOfBoundBox')
+               .moveTo(-0.425, 15.3386)
+               .polyline([(-0.425, 15.4086),
+                         (-0.5, 15.839),
+                         (-0.75, 15.839),
+                         (-0.75, 15.3386)]).close()
+               .cutThruAll()
+               # back right
+               .faces('>Y').workplane()
+               .moveTo(0.425, -15.3386)
+               .polyline([(0.425, -15.4086),
+                         (0.5, -15.839),
+                         (0.75, -15.839),
+                         (0.75, -15.3386)]).close()
+               .cutThruAll()
+               # front right
+               .faces('>Y').workplane(centerOption='CenterOfBoundBox')
+               .moveTo(-0.425, -15.3386)
+               .polyline([(-0.425, -15.4086),
+                         (-0.5, -15.839),
+                         (-0.75, -15.839),
+                         (-0.75, -15.3386)]).close()
+               .cutThruAll()
           )
 
-show_object(outer_h)
+show_object(outer_h_top)
 ```
-
-<iframe width="650" height="400" src="outer_h_top.html?overflow=none" frameborder="0" allowfullscreen></iframe>
-<p><a href="outer_h_top.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 
 # Building it for Real
 
@@ -113,6 +163,7 @@ Yet as always, there is room for improvement.
 * The 0.5in 'lip' added to the TV does *slightly* interfere with the image when viewing at extreme angles. That fact paired with the reflectivity of the surface can cause some distraction. I only view casually anyway, so this doesn't bother me. It's definitely not good enough for the average consumer, though.
 * Finishing. I like the industrial look, but it could be out of place in most homes. A nice powder coated finish could look really sharp.
 * Weight. This thing is **heavy**. I like it that way, but it's certainly excessive. I could strategically cut holes on all inner faces to drastically cut down weight. Or I could make a triangular cut out pattern part of the aesthetic of the frame. As well, I could re-think the front frame portion as a flat sheet or even as a piece of plastic or wood to cut down a lot of weight.
+* don't forget the remote! I forgot that the only way to turn the TV on is via the remote control (power button was attached to the old bezel). You can't shoot IR signals through solid metal, so I had to drill a hole that aligns with the sensor. Silly thing to forget.
     
 There it is, my design and build of an industrial-strength TV frame. Thanks for reading through my article. If you have any questions or suggestions, I'm glad to listen! Please ask away on my Twitter, [@RustyVermeer](https://www.twitter.com/RustyVermeer).
 
@@ -123,8 +174,3 @@ There it is, my design and build of an industrial-strength TV frame. Thanks for 
 import page_tools as pg
 pg.generate_page('tv_frame', color='#858a7e')
 ```
-
-    [NbConvertApp] Converting notebook tv_frame.ipynb to markdown
-    [NbConvertApp] Writing 5162 bytes to tv_frame.md
-    Created index.html
-
