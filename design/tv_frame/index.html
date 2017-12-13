@@ -82,6 +82,8 @@ show_object(sample_tube)
 </ul>
 <p>Naming things is, generally speaking, a difficult thing to do. As such, it's much more sensible to <em>see</em> the parts than it is to rely solely on names. The next steps will be defining the CadQuery code to generate all of the parts in the list.    </p>
 <h1>Outer Frame Horizontals</h1>
+<p>The horizontal frame pieces are identical, with a small exception for the bottom bar: two holes are cut in order to provide a mounting location for the legs.</p>
+<h2>Outer Horizontal Top</h2>
 <pre><code>L = 31.6772 # comes from width of scrn + offset due to tube dims
 tap_01875 = 0.1495
 
@@ -100,14 +102,12 @@ outer_h_top = (cq.Workplane(&#39;XY&#39;)
                             (-0.5, 0.0),])
                .hole(tap_01875, depth=0.08)
                # holes centered on back face
-               # 3 pairs of 3/16 tapped holes
+               # 2 pairs of 3/16 tapped holes
                # will mount back &#39;lock bar&#39; tubes
                .faces(&#39;&lt;X&#39;).workplane()
-               .pushPoints([(0.0,  0.5),
-                            (0.0, -0.5),
-                            (0.0, 8.8386),
+               .pushPoints([(0.0, 6.8386),
                             (0.0, 7.8386),
-                            (0.0, -8.8386),
+                            (0.0, -6.8386),
                             (0.0, -7.8386)])
                .hole(tap_01875, depth=0.08)
                # Cut the tube ends to create a &#39;dovetail&#39;
@@ -144,7 +144,7 @@ outer_h_top = (cq.Workplane(&#39;XY&#39;)
                          (-0.75, -15.839),
                          (-0.75, -15.3386)]).close()
                .cutThruAll()
-          )
+              )
 
 show_object(outer_h_top)
 </pre></code>
@@ -153,6 +153,259 @@ show_object(outer_h_top)
 <iframe width="650" height="400" src="outer_h_top.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
 <p><a href="outer_h_top.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h2>Outer Horizontal Bottom</h2>
+<pre><code>tap_025 = 0.201
+
+outer_h_bottom = (outer_h_top
+                  .faces(&#39;&lt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
+                  .pushPoints([(0.0,  7.3386),
+                               (0.0, -7.3386)])
+                  .hole(tap_01875, depth=0.08)
+                 )
+
+show_object(outer_h_bottom)
+</pre></code>
+
+
+<iframe width="650" height="400" src="outer_h_bottom.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="outer_h_bottom.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h2>Outer Verticals</h2>
+<pre><code>L = 19.6693 # comes from height of scrn + offset due to tube dims
+tap_01875 = 0.1495
+
+outer_v = (cq.Workplane(&#39;XY&#39;)
+               .workplane(offset=-L/2.0)
+               .dxf(&#39;downloads/profile.dxf&#39;)
+               .extrude(L)
+               # holes on top face near edge
+               # will be tapped with 3/16 bolt thread
+               # used to mount inner frame tube
+               .faces(&#39;&gt;Y&#39;).workplane()
+               .pushPoints([(-0.5,  8.8507),
+                            (-0.5, -8.8507),
+                            (-0.5,  4.4173),
+                            (-0.5, -4.4173),
+                            (-0.5, 0.0),])
+               .hole(tap_01875, depth=0.08)
+               # Cut the tube ends to create the
+               # &#39;dovetail&#39; slot
+               # left
+               .faces(&#39;&gt;Z&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
+               .moveTo(0.0, 0.135).rect(0.85, 0.25, centered=True)
+               .cutBlind(-0.5, clean=True)
+               .faces(&#39;&gt;Z&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
+               .moveTo(0.0, -0.135).rect(1.0, 0.25, centered=True)
+               .cutBlind(-0.5, clean=True)
+               # right
+               .faces(&#39;&lt;Z&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
+               .moveTo(0.0, 0.135).rect(0.85, 0.25, centered=True)
+               .cutBlind(-0.5, clean=True)
+               .faces(&#39;&lt;Z&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
+               .moveTo(0.0, -0.135).rect(1.0, 0.25, centered=True)
+               .cutBlind(-0.5, clean=True)
+              )
+
+show_object(outer_v)
+</pre></code>
+
+
+<iframe width="650" height="400" src="outer_v.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="outer_v.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h2>Inner Frame Horizontals and Verticals</h2>
+<p>The inner frame components are identically designed. The horizontal bars are equivalent, as are the vertical bars. The only difference between the verticals and horizontals is the length. As such, the following code is parametric according to L, the tube's total length.</p>
+<pre><code>L = 27.6772 # horizontals
+# L = 18.6693 # verticals
+tap_01875 = 0.1495
+
+pnts = [(0.0, 0.0),
+        (0.0,  (L/2.0 - 0.5) ),
+        (0.0, -(L/2.0 - 0.5) ),
+        (0.0,  (L/2.0 - 0.5)/2.0 ),
+        (0.0, -(L/2.0 - 0.5)/2.0 )]
+
+inner = (cq.Workplane(&#39;XY&#39;)
+               .workplane(offset=-L/2.0)
+               .dxf(&#39;downloads/profile.dxf&#39;)
+               .extrude(L)
+               # holes on the side which are
+               # used to mount the inner frame
+               # to the outer frame
+               .faces(&#39;&gt;X&#39;).workplane()
+               .pushPoints(pnts)
+               .hole(tap_01875, depth=0.08)
+               # Access holes cut on wide face
+               # which will be facing inwards
+               # when the whole frame is assembled
+               .faces(&#39;&gt;Y&#39;).workplane()
+               .pushPoints(pnts)
+               .rect(1.05, 0.5)
+               .cutBlind(-0.08)
+              )
+
+show_object(inner)
+</pre></code>
+
+<h3>Inner Horizontals</h3>
+<iframe width="650" height="400" src="inner_h.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="inner_h.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h3>Inner Verticals</h3>
+<iframe width="650" height="400" src="inner_v.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="inner_v.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h2>Stands</h2>
+<pre><code>L = 10.0
+
+stand = (cq.Workplane(&#39;XY&#39;)
+               .workplane(offset=-L/2.0)
+               .dxf(&#39;downloads/profile.dxf&#39;)
+               .extrude(L)
+               # hole on top for .25in bolt to pass through
+               .faces(&#39;&gt;Y&#39;).workplane()
+               .hole(0.257, depth=0.08)
+               # Access hole on bottom
+               .faces(&#39;&lt;Y&#39;).workplane()
+               .hole(0.9375, depth=0.08)
+              )
+
+show_object(stand)
+</pre></code>
+
+
+<iframe width="650" height="400" src="stand.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="stand.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h2>Lock Bars</h2>
+<pre><code>L = 19.6693 # comes from height of scrn + offset due to tube dims
+tap_025 = 0.201
+
+pnts = [(0.0, 0.0 ),
+        (0.0,  (L/2.0 - 3.0) ),
+        (0.0, -(L/2.0 - 3.0) )]
+
+end_holes = [( 0.5,  (L/2.0 - 0.25) ),
+             (-0.5,  (L/2.0 - 0.25) ),
+             ( 0.5, -(L/2.0 - 0.25) ),
+             (-0.5, -(L/2.0 - 0.25) )]
+
+lock_bar = (cq.Workplane(&#39;XY&#39;)
+               .workplane(offset=-L/2.0)
+               .dxf(&#39;downloads/profile.dxf&#39;)
+               .extrude(L)
+               # hole on bottom for .25in bolt
+               # to be threaded through for locking
+               .faces(&#39;&lt;Y&#39;).workplane()
+               .pushPoints(pnts)
+               .hole(tap_025, depth=0.08)
+               # Access hole on top
+               .faces(&#39;&gt;Y&#39;).workplane()
+               .pushPoints(pnts)
+               .hole(0.9375, depth=0.08)
+               # holes on ends for 3/16in 
+               # screws to pass through
+               .faces(&#39;&lt;Y&#39;).workplane()
+               .pushPoints(end_holes)
+               .hole(0.1875, depth=0.08)
+               # cut 45deg. triangles from
+               # tube ends for screw access
+               .faces(&#39;&gt;X&#39;).workplane()
+               .moveTo(-0.25, (L/2.0) )
+               .polyline([( 0.25, (L/2.0) ),
+                          ( 0.25, (L/2.0) - 0.5 )]).close()
+               .cutThruAll()
+               .faces(&#39;&gt;X&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
+               .moveTo(-0.25, -(L/2.0) )
+               .polyline([( 0.25, -(L/2.0) ),
+                          ( 0.25, -(L/2.0) + 0.5 )]).close()
+               .cutThruAll()
+              )
+
+show_object(lock_bar)
+</pre></code>
+
+
+<iframe width="650" height="400" src="lock_bar.html?overflow=none" frameborder="0" allowfullscreen></iframe>
+
+<p><a href="lock_bar.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
+
+<h1>Design Assembly</h1>
+<p>This frame is a bit more complex of an assembly, so the following code might get a bit messy. It'll show off the intended design, though.</p>
+<pre><code>import cqjupyter_extras as cqe
+import cqtools
+
+# PARTS LIST
+# inner_h
+# inner_v
+# outer_h_bottom
+# outer_h_top
+# outer_v
+# stand
+# lock_bar
+
+# all positions are in mm.
+# There is definite need to improve the
+# assembly workflow here.
+asm = [ 
+    [&#39;stand&#39;, &#39;0 0  186.4&#39;, &#39;0 90 0&#39; ],
+    [&#39;stand&#39;, &#39;0 0 -186.4&#39;, &#39;0 90 0&#39; ],
+    [&#39;outer_h_bottom&#39;, &#39;0 12.7 0&#39;, &#39;0 0 0&#39; ],
+    [&#39;inner_h&#39;, &#39;12.7 38.1 0&#39;, &#39;0 0 90&#39; ],
+    [&#39;outer_v&#39;, &#39;0 254.9 -395.95&#39;, &#39;90 90 90&#39; ],
+    [&#39;inner_v&#39;, &#39;12.7 254.9 -370.55&#39;, &#39;270 90 0&#39; ],
+    [&#39;outer_v&#39;, &#39;0 254.9 395.95&#39;, &#39;270 90 270&#39; ],
+    [&#39;inner_v&#39;, &#39;12.7 254.9 370.55&#39;, &#39;90 270 0&#39; ],
+    [&#39;outer_h_top&#39;, &#39;0 498.6 0&#39;, &#39;180 0 0&#39; ],
+    [&#39;inner_h&#39;, &#39;12.7 474.2 0&#39;, &#39;0 0 90&#39; ],
+    [&#39;lock_bar&#39;, &#39;-25.4 255.9 186.4&#39;, &#39;90 270 0&#39; ],
+    [&#39;lock_bar&#39;, &#39;-25.4 255.9 -186.4&#39;, &#39;90 270 0&#39; ],
+]
+
+# cqe.cqassemble(asm, name=&#39;assembly&#39;)
+
+# base_part = cqtools._loadSTEP(&#39;base.STEP&#39;)
+# vert_part = cqtools._loadSTEP(&#39;vert.STEP&#39;)
+# support_part = cqtools._loadSTEP(&#39;support.STEP&#39;)
+
+# asm2 = [
+#     base_part.findSolid(),
+#     (vert_part
+#          .rotate((0,0,0), (1,0,0), 270)
+#          .translate((0, 76.2, 222.25))
+#          .findSolid()
+#     ),
+#     (vert_part
+#          .rotate((0,0,0), (1,0,0), 270)
+#          .translate((0, -76.2, 222.25))
+#          .findSolid()
+#     ),
+#     (support_part
+#          .rotate((0,0,0), (0,1,0), 90)
+#          .rotate((0,0,0), (1,0,0), 270)
+#          .translate((38.1, 247.65, 76.2))
+#          .findSolid()
+#     ),
+#     (support_part
+#          .rotate((0,0,0), (0,1,0), 90)
+#          .rotate((0,0,0), (1,0,0), 270)
+#          .translate((38.1, 247.65, -76.2))
+#          .findSolid()
+#     ),
+# ]
+
+# Some weird syntax to properly create the compound geometry
+# There is likely a cleaner way to do this, but I&#39;m unaware currently
+# final = cq.cq.Compound.makeCompound(asm2)
+# final = cq.CQ(final)
+# show_object(final)
+</pre></code>
 
 <h1>Building it for Real</h1>
 <p>Once again I find myself kicking the laser tube cutter into action. I'm extremely lucky to remember how this thing works. As it turns out, I need to be good at last second maintenance for this thing. I had to search the shop for some hydraulic oil to top up the reservoir! Fortunately, everything still works.</p>
@@ -179,10 +432,5 @@ show_object(outer_h_top)
 <li>don't forget the remote! I forgot that the only way to turn the TV on is via the remote control (power button was attached to the old bezel). You can't shoot IR signals through solid metal, so I had to drill a hole that aligns with the sensor. Silly thing to forget.</li>
 </ul>
 <p>There it is, my design and build of an industrial-strength TV frame. Thanks for reading through my article. If you have any questions or suggestions, I'm glad to listen! Please ask away on my Twitter, <a href="https://www.twitter.com/RustyVermeer">@RustyVermeer</a>.</p>
-<pre><code>!jupyter nbconvert --to markdown tv_frame.ipynb
-
-import page_tools as pg
-pg.generate_page(&#39;tv_frame&#39;, color=&#39;#858a7e&#39;)
-</pre></code>
     </body>
 </html>
