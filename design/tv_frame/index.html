@@ -26,6 +26,9 @@
             <div id="topper"></div>
         </header>
 <h1>Building a TV Frame</h1>
+<blockquote>
+<p>If you're not keen on reading through my design work, that's a bit of a shame, but I understand; we're busy people. Feel free to check out the <a href="#Downloads">downloads at the bottom</a> of the article, though!</p>
+</blockquote>
 <p>Several years ago I built a weird looking desk that had a PC and TV built right in. It never progressed beyond 'usable prototype', and was eventually disassembled. The TV had been partially stripped down to fit nicely in the desk's surface, and the old parts were discarded.</p>
 <p><img alt="" src="img/old_desk.jpg" /></p>
 <p>Since the TV is still good, I want to design a frame and stand that will allow me to actually use it again.</p>
@@ -46,7 +49,7 @@
 <p><center><img alt="" src="img/profile.svg" /></center></p>
 <p>Conveniently, there is a <em>work in progress</em> dxf importer for CadQuery that should make it much simpler to work with 2D objects.</p>
 <p>So, I made a <strong>.dxf</strong> file very similar to the above SVG, and imported it to create the tube that I'll use to define all of the tv frame's parts.</p>
-<pre><code># make a simple sample piece 
+<pre><code class="hljs python"># make a simple sample piece 
 # to try out the dxf import function
 sample_tube = (cq.Workplane(&#39;XY&#39;)
                .workplane(offset=-1)
@@ -84,7 +87,7 @@ show_object(sample_tube)
 <h1>Outer Frame Horizontals</h1>
 <p>The horizontal frame pieces are identical, with a small exception for the bottom bar: two holes are cut in order to provide a mounting location for the legs.</p>
 <h2>Outer Horizontal Top</h2>
-<pre><code>L = 31.6772 # comes from width of scrn + offset due to tube dims
+<pre><code class="hljs python">L = 31.6772 # comes from width of scrn + offset due to tube dims
 tap_01875 = 0.1495
 
 outer_h_top = (cq.Workplane(&#39;XY&#39;)
@@ -129,7 +132,7 @@ outer_h_top = (cq.Workplane(&#39;XY&#39;)
                          (-0.75, 15.3386)]).close()
                .cutThruAll()
                # back right
-               .faces(&#39;&gt;Y&#39;).workplane()
+               .faces(&#39;&gt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
                .moveTo(0.425, -15.3386)
                .polyline([(0.425, -15.4086),
                          (0.5, -15.839),
@@ -155,7 +158,7 @@ show_object(outer_h_top)
 <p><a href="outer_h_top.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 
 <h2>Outer Horizontal Bottom</h2>
-<pre><code>tap_025 = 0.201
+<pre><code class="hljs python">tap_025 = 0.201
 
 outer_h_bottom = (outer_h_top
                   .faces(&#39;&lt;Y&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
@@ -173,7 +176,7 @@ show_object(outer_h_bottom)
 <p><a href="outer_h_bottom.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 
 <h2>Outer Verticals</h2>
-<pre><code>L = 19.6693 # comes from height of scrn + offset due to tube dims
+<pre><code class="hljs python">L = 19.6693 # comes from height of scrn + offset due to tube dims
 tap_01875 = 0.1495
 
 outer_v = (cq.Workplane(&#39;XY&#39;)
@@ -183,7 +186,7 @@ outer_v = (cq.Workplane(&#39;XY&#39;)
                # holes on top face near edge
                # will be tapped with 3/16 bolt thread
                # used to mount inner frame tube
-               .faces(&#39;&gt;Y&#39;).workplane()
+               .faces(&#39;&lt;Y&#39;).workplane()
                .pushPoints([(-0.5,  8.8507),
                             (-0.5, -8.8507),
                             (-0.5,  4.4173),
@@ -194,10 +197,10 @@ outer_v = (cq.Workplane(&#39;XY&#39;)
                # &#39;dovetail&#39; slot
                # left
                .faces(&#39;&gt;Z&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
-               .moveTo(0.0, 0.135).rect(0.85, 0.25, centered=True)
+               .moveTo(0.0, -0.135).rect(0.85, 0.25, centered=True)
                .cutBlind(-0.5, clean=True)
                .faces(&#39;&gt;Z&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
-               .moveTo(0.0, -0.135).rect(1.0, 0.25, centered=True)
+               .moveTo(0.0, 0.135).rect(1.0, 0.25, centered=True)
                .cutBlind(-0.5, clean=True)
                # right
                .faces(&#39;&lt;Z&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
@@ -218,7 +221,7 @@ show_object(outer_v)
 
 <h2>Inner Frame Horizontals and Verticals</h2>
 <p>The inner frame components are identically designed. The horizontal bars are equivalent, as are the vertical bars. The only difference between the verticals and horizontals is the length. As such, the following code is parametric according to L, the tube's total length.</p>
-<pre><code>L = 27.6772 # horizontals
+<pre><code class="hljs python">L = 27.6772 # horizontals
 # L = 18.6693 # verticals
 tap_01875 = 0.1495
 
@@ -246,22 +249,28 @@ inner = (cq.Workplane(&#39;XY&#39;)
                .rect(1.05, 0.5)
                .cutBlind(-0.08)
               )
-
-show_object(inner)
 </pre></code>
 
 <h3>Inner Horizontals</h3>
+<pre><code class="hljs python">show_object(inner_h)
+</pre></code>
+
+
 <iframe width="650" height="400" src="inner_h.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
 <p><a href="inner_h.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 
 <h3>Inner Verticals</h3>
+<pre><code class="hljs python">show_object(inner_v)
+</pre></code>
+
+
 <iframe width="650" height="400" src="inner_v.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
 <p><a href="inner_v.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 
 <h2>Stands</h2>
-<pre><code>L = 10.0
+<pre><code class="hljs python">L = 10.0
 
 stand = (cq.Workplane(&#39;XY&#39;)
                .workplane(offset=-L/2.0)
@@ -284,7 +293,7 @@ show_object(stand)
 <p><a href="stand.html" target="_blank">OPEN SCENE IN NEW TAB</a></p>
 
 <h2>Lock Bars</h2>
-<pre><code>L = 19.6693 # comes from height of scrn + offset due to tube dims
+<pre><code class="hljs python">L = 19.6693 # comes from height of scrn + offset due to tube dims
 tap_025 = 0.201
 
 pnts = [(0.0, 0.0 ),
@@ -316,7 +325,7 @@ lock_bar = (cq.Workplane(&#39;XY&#39;)
                .hole(0.1875, depth=0.08)
                # cut 45deg. triangles from
                # tube ends for screw access
-               .faces(&#39;&gt;X&#39;).workplane()
+               .faces(&#39;&gt;X&#39;).workplane(centerOption=&#39;CenterOfBoundBox&#39;)
                .moveTo(-0.25, (L/2.0) )
                .polyline([( 0.25, (L/2.0) ),
                           ( 0.25, (L/2.0) - 0.5 )]).close()
@@ -338,7 +347,7 @@ show_object(lock_bar)
 
 <h1>Design Assembly</h1>
 <p>This frame is a bit more complex of an assembly, so the following code might get a bit messy. It'll show off the intended design, though.</p>
-<pre><code>import cqjupyter_extras as cqe
+<pre><code class="hljs python">import cqjupyter_extras as cqe
 import cqtools
 
 # PARTS LIST
@@ -358,54 +367,104 @@ asm = [
     [&#39;stand&#39;, &#39;0 0 -186.4&#39;, &#39;0 90 0&#39; ],
     [&#39;outer_h_bottom&#39;, &#39;0 12.7 0&#39;, &#39;0 0 0&#39; ],
     [&#39;inner_h&#39;, &#39;12.7 38.1 0&#39;, &#39;0 0 90&#39; ],
-    [&#39;outer_v&#39;, &#39;0 254.9 -395.95&#39;, &#39;90 90 90&#39; ],
-    [&#39;inner_v&#39;, &#39;12.7 254.9 -370.55&#39;, &#39;270 90 0&#39; ],
-    [&#39;outer_v&#39;, &#39;0 254.9 395.95&#39;, &#39;270 90 270&#39; ],
-    [&#39;inner_v&#39;, &#39;12.7 254.9 370.55&#39;, &#39;90 270 0&#39; ],
-    [&#39;outer_h_top&#39;, &#39;0 498.6 0&#39;, &#39;180 0 0&#39; ],
-    [&#39;inner_h&#39;, &#39;12.7 474.2 0&#39;, &#39;0 0 90&#39; ],
-    [&#39;lock_bar&#39;, &#39;-25.4 255.9 186.4&#39;, &#39;90 270 0&#39; ],
-    [&#39;lock_bar&#39;, &#39;-25.4 255.9 -186.4&#39;, &#39;90 270 0&#39; ],
+    [&#39;outer_v&#39;, &#39;0 256.3 -395.95&#39;, &#39;90 90 90&#39; ],
+    [&#39;inner_v&#39;, &#39;12.7 256.3 -370.55&#39;, &#39;270 90 0&#39; ],
+    [&#39;outer_v&#39;, &#39;0 256.3 395.95&#39;, &#39;270 90 270&#39; ],
+    [&#39;inner_v&#39;, &#39;12.7 256.3 370.55&#39;, &#39;90 270 0&#39; ],
+    [&#39;outer_h_top&#39;, &#39;0 500.0 0&#39;, &#39;180 0 0&#39; ],
+    [&#39;inner_h&#39;, &#39;12.7 474.4 0&#39;, &#39;0 0 90&#39; ],
+    [&#39;lock_bar&#39;, &#39;-25.4 256.3 186.4&#39;, &#39;90 270 0&#39; ],
+    [&#39;lock_bar&#39;, &#39;-25.4 256.3 -186.4&#39;, &#39;90 270 0&#39; ],
 ]
 
 # cqe.cqassemble(asm, name=&#39;assembly&#39;)
+# load the STEP files to build the .STEP assembly file
+inner_h = cqtools._loadSTEP(&#39;downloads/inner_h.STEP&#39;)
+inner_v = cqtools._loadSTEP(&#39;downloads/inner_v.STEP&#39;)
+outer_h_bottom = cqtools._loadSTEP(&#39;downloads/outer_h_bottom.STEP&#39;)
+outer_h_top = cqtools._loadSTEP(&#39;downloads/outer_h_top.STEP&#39;)
+outer_v = cqtools._loadSTEP(&#39;downloads/outer_v.STEP&#39;)
+stand = cqtools._loadSTEP(&#39;downloads/stand.STEP&#39;)
+lock_bar = cqtools._loadSTEP(&#39;downloads/lock_bar.STEP&#39;)
 
-# base_part = cqtools._loadSTEP(&#39;base.STEP&#39;)
-# vert_part = cqtools._loadSTEP(&#39;vert.STEP&#39;)
-# support_part = cqtools._loadSTEP(&#39;support.STEP&#39;)
-
-# asm2 = [
-#     base_part.findSolid(),
-#     (vert_part
-#          .rotate((0,0,0), (1,0,0), 270)
-#          .translate((0, 76.2, 222.25))
-#          .findSolid()
-#     ),
-#     (vert_part
-#          .rotate((0,0,0), (1,0,0), 270)
-#          .translate((0, -76.2, 222.25))
-#          .findSolid()
-#     ),
-#     (support_part
-#          .rotate((0,0,0), (0,1,0), 90)
-#          .rotate((0,0,0), (1,0,0), 270)
-#          .translate((38.1, 247.65, 76.2))
-#          .findSolid()
-#     ),
-#     (support_part
-#          .rotate((0,0,0), (0,1,0), 90)
-#          .rotate((0,0,0), (1,0,0), 270)
-#          .translate((38.1, 247.65, -76.2))
-#          .findSolid()
-#     ),
-# ]
+asm2 = [
+    (stand
+         .rotate((0,0,0), (0,1,0), 90)
+         .translate((0, 0, 186.4))
+         .findSolid()
+    ),
+    (stand
+         .rotate((0,0,0), (0,1,0), 90)
+         .translate((0, 0, -186.4))
+         .findSolid()
+    ),
+    (outer_h_bottom
+         .rotate((0,0,0), (1,0,0), 0)
+         .translate((0, 12.7, 0))
+         .findSolid()
+    ),
+    (inner_h
+         .rotate((0,0,0), (0,0,1), 90)
+         .rotate((0,0,0), (1,0,0), 180)
+         .translate((12.7, 38.1, 0))
+         .findSolid()
+    ),
+    (outer_v
+         .rotate((0,0,0), (1,0,0), 270)
+         .rotate((0,0,0), (0,0,1), 180)
+         .translate((0, 256.3, -395.95))
+         .findSolid()
+    ),
+    (inner_v
+         .rotate((0,0,0), (0,0,1), 90)
+         .rotate((0,0,0), (1,0,0), 270)
+         .translate((12.7, 256.3, -370.55))
+         .findSolid()
+    ),
+    (outer_v
+         .rotate((0,0,0), (1,0,0), 90)
+         .rotate((0,0,0), (0,0,1), 180)
+         .translate((0, 256.3, 395.95))
+         .findSolid()
+    ),
+    (inner_v
+         .rotate((0,0,0), (0,0,1), 90)
+         .rotate((0,0,0), (1,0,0), 90)
+         .translate((12.7, 256.3, 370.55))
+         .findSolid()
+    ),
+    (outer_h_top
+         .rotate((0,0,0), (1,0,0), 180)
+         .translate((0, 500.0, 0))
+         .findSolid()
+    ),
+    (inner_h
+         .rotate((0,0,0), (0,0,1), 90)
+         .translate((12.7, 474.4, 0))
+         .findSolid()
+    ),
+    (lock_bar
+         .rotate((0,0,0), (0,0,1), 90)
+         .rotate((0,0,0), (1,0,0), 270)
+         .translate((-25.4, 256.3, 186.4))
+         .findSolid()
+    ),
+    (lock_bar
+         .rotate((0,0,0), (0,0,1), 90)
+         .rotate((0,0,0), (1,0,0), 270)
+         .translate((-25.4, 256.3, -186.4))
+         .findSolid()
+    ),
+]
 
 # Some weird syntax to properly create the compound geometry
 # There is likely a cleaner way to do this, but I&#39;m unaware currently
-# final = cq.cq.Compound.makeCompound(asm2)
-# final = cq.CQ(final)
-# show_object(final)
+final = cq.cq.Compound.makeCompound(asm2)
+assembly = cq.CQ(final)
+show_object(assembly)
 </pre></code>
+
+<iframe width="650" height="500" src="assembly.html?overflow=none" frameborder="0" allowfullscreen=""></iframe>
 
 <h1>Building it for Real</h1>
 <p>Once again I find myself kicking the laser tube cutter into action. I'm extremely lucky to remember how this thing works. As it turns out, I need to be good at last second maintenance for this thing. I had to search the shop for some hydraulic oil to top up the reservoir! Fortunately, everything still works.</p>
@@ -415,6 +474,8 @@ asm = [
 <p>With all the parts cut, it simply comes down to assembly. The pictures below show the process, more or less. Of course, the struggle of tapping the holes and tightening up all of the screws is not pictured.</p>
 <iframe width="650" height="700" src="img/asm_imgs.html?overflow=none" frameborder="0" allowfullscreen></iframe>
 
+<p>And, just for fun, here's one final shot of my TV, quietly assisting me in enjoying some Nintendo Switch gaming.</p>
+<p><img alt="" src="img/final.jpg" /></p>
 <h2>Final Thoughts</h2>
 <p>I can finally use my TV again. Mission accomplished! I like the industrial look to the whole thing, too; I suspect there's no TV quite like this one.</p>
 <p>Yet as always, there is room for improvement.</p>
@@ -432,5 +493,26 @@ asm = [
 <li>don't forget the remote! I forgot that the only way to turn the TV on is via the remote control (power button was attached to the old bezel). You can't shoot IR signals through solid metal, so I had to drill a hole that aligns with the sensor. Silly thing to forget.</li>
 </ul>
 <p>There it is, my design and build of an industrial-strength TV frame. Thanks for reading through my article. If you have any questions or suggestions, I'm glad to listen! Please ask away on my Twitter, <a href="https://www.twitter.com/RustyVermeer">@RustyVermeer</a>.</p>
+<h1>Bits and Pieces</h1>
+<h2>Software</h2>
+<p>I used several different programs to make this project:<br />
+<em> <a href="https://github.com/dcowden/cadquery/tree/9e18b61d645981395e20fa62afd0861e023b865c">CadQuery Github Page</a><br />
+</em> <a href="https://www.freecadweb.org/">FreeCAD</a><br />
+<em> <a href="http://jupyter.org/">Jupyter</a><br />
+</em> <a href="https://github.com/RustyVermeer/cqnb">CQNB - Jupyter Notebook CadQuery Extension</a><br />
+* <a href="https://aframe.io/">A-Frame VR</a></p>
+<h2 id="Downloads">Downloads</h2>
+<p>As mentioned at the start of this post, I've got some downloads for you to look at.</p>
+<ul>
+<li><a href="downloads/step-files.zip" download>step-files.zip</a> containing:<ul>
+<li>.STEP files for each part</li>
+<li>.STEP file for the assembly</li>
+<li>the CQ code as a .py file, which can be run locally (requires FreeCAD and CadQuery) --&gt; Please don't trust me blindly, read the code before you run things.</li>
+<li>the .ipynb file (Jupyter Notebook) that this post is built from. You can run this on your own Jupyter server, but once again FreeCAD and CadQuery are required. Additionally, the cqjupyter module is needed to be able to view your models in the notebook.</li>
+</ul>
+</li>
+<li><a href="downloads/tv_frame.ipynb" download>tv_frame.ipynb</a> which I created as I went through my design process. It also happens to be the source (more or less) of this post.</li>
+<li><a href="downloads/tv_frame.py" download>tv_frame.py</a>. The source code for the cadquery parts, with no additional markdown nonsense. You'll need to look at the CadQuery documentation to set things up, if you don't already have it installed.</li>
+</ul>
     </body>
 </html>
